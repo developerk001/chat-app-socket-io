@@ -1,0 +1,27 @@
+{
+  "name": "chat-app-with-socket-io",
+  "version": "1.0.0",
+  "description": "Simple chat app with socket io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "jest"
+  },
+  "engines": {
+    "node": "9.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com"
+  },
+  "keywords": [
+    "chat-app",
+    "socket-io",
+    "realtime"
+  ],
+  "author": "developerl",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
