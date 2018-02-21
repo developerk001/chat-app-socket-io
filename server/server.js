@@ -19,8 +19,14 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log('Client Disconnected')
   })
-  socket.on('createMessage', message => {
+  socket.on('createMessage', (message, callback) => {
     io.emit('newMessage', getMessage(message.from, message.message))
+    var hour = new Date().getHours()
+    var minute = new Date().getMinutes()
+    var is = (hour > 12) ? "PM" : "AM"
+    hour = (hour > 12) ? (hour % 12) : hour
+    var time = `${hour}:${minute} ${is}`
+    callback(`seen at ${time}`)
     // socket.broadcast.emit('newMessage', {
     //   from: msg.from,
     //   msg: msg.message,
