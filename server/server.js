@@ -17,12 +17,11 @@ io.on('connection', socket => {
     console.log('Client Disconnected')
   })
   socket.on('createMessage', msg => {
-    console.log(msg)
-  })
-  socket.emit('newMessage', {
-    from: 'developerk',
-    message: 'hello',
-    messagedAt: new Date().toString()
+    io.emit('newMessage', {
+      from: msg.from,
+      msg: msg.message,
+      createdAt: new Date().toString()
+    })
   })
 })
 
