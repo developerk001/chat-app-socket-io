@@ -6,8 +6,8 @@ socket.on('disconnect', () => {
   console.log('Disconnect from server')
 })
 socket.on('newMessage', msg => {
-  console.log(msg)
-  $('#messages').append(`<li>${msg.from}: ${msg.message}</li>`)
+  var time = moment(msg.createdAt).format('h:mm a')
+  $('#messages').append(`<li>${msg.from}: ${time} => ${msg.message}</li>`)
 })
 $('#form').on('submit', e => {
   e.preventDefault()
@@ -21,7 +21,8 @@ $('#form').on('submit', e => {
   }
 })
 socket.on('newLocation', msg => {
-  $('#messages').append(`<li>${msg.from}: <a target="_blank" href="${msg.link}">My Location</a></li>`)
+  var time = moment(msg.createdAt).format('h:mm a')
+  $('#messages').append(`<li>${msg.from}: ${time} => <a target="_blank" href="${msg.link}">My Location</a></li>`)
 })
 $('#location').on('click', () => {
   if (!navigator.geolocation) {
