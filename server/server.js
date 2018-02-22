@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
-const {getMessage} = require('./utils/message');
+const {getMessage, getLocationLink} = require('./utils/message');
 
 app.use(express.static(publicPath))
 
@@ -21,17 +21,10 @@ io.on('connection', socket => {
   })
   socket.on('createMessage', (message, callback) => {
     io.emit('newMessage', getMessage(message.from, message.message))
-    var hour = new Date().getHours()
-    var minute = new Date().getMinutes()
-    var is = (hour > 12) ? "PM" : "AM"
-    hour = (hour > 12) ? (hour % 12) : hour
-    var time = `${hour}:${minute} ${is}`
-    callback(`seen at ${time}`)
-    // socket.broadcast.emit('newMessage', {
-    //   from: msg.from,
-    //   msg: msg.message,
-    //   createdAt: new Date().toString()
-    // })
+    callback(`seen at ${new Date().toLocaleString({hour: 'numeric', minute: 'numeric', hour12: true})}`)
+  })
+  socket.on('createLocation', location => {
+    socket.emit('newLocation', getLocationLink('Admin', location.lat, location.lng))
   })
 })
 
