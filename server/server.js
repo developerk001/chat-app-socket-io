@@ -21,7 +21,7 @@ io.on('connection', socket => {
   })
   socket.on('createMessage', (message, callback) => {
     io.emit('newMessage', getMessage(message.from, message.message))
-    callback(`seen at ${new Date().toLocaleString({hour: 'numeric', minute: 'numeric', hour12: true})}`)
+    callback()
   })
   socket.on('createLocation', location => {
     socket.emit('newLocation', getLocationLink('Admin', location.lat, location.lng))
