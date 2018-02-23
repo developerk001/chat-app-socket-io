@@ -121,12 +121,15 @@ button:disabled {
 
 .chat__messages {
   flex-grow: 1;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat__footer {
   background: #e6eaee;
   display: flex;
   padding: 10px;
+  /*height: 60px;*/
   flex-shrink: 0;
 }
 

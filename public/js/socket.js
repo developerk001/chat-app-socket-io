@@ -1,4 +1,16 @@
 var socket = io()
+function scroll() {
+  let messages = $("#messages")
+  let newMessage = messages.children('li:last-child')
+  let newMessageHeight = newMessage.innerHeight()
+  let lasMessageHeight = newMessage.prev().innerHeight()
+  let cH = messages.prop('clientHeight')
+  let sT = messages.prop('scrollTop')
+  let sH = messages.prop('scrollHeight')
+  if (cH + sT + newMessageHeight + lasMessageHeight >= sH) {
+    messages.scrollTop(sH)
+  }
+}
 socket.on('connect', () => {
   console.log('Connected to sever')
 })
@@ -14,6 +26,7 @@ socket.on('newMessage', msg => {
     createdAt: time
   })
   $('#messages').append(html)
+  scroll()
 })
 $('#form').on('submit', e => {
   e.preventDefault()
@@ -35,6 +48,7 @@ socket.on('newLocation', msg => {
     link: msg.link
   })
   $('#messages').append(html)
+  scroll()
 })
 $('#location').on('click', () => {
   if (!navigator.geolocation) {
