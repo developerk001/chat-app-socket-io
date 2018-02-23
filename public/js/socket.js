@@ -1,4 +1,6 @@
 var socket = io()
+
+// For autoscrolling
 function scroll() {
   let messages = $("#messages")
   let newMessage = messages.children('li:last-child')
@@ -11,12 +13,33 @@ function scroll() {
     messages.scrollTop(sH)
   }
 }
+
+// when user connects to server
 socket.on('connect', () => {
-  console.log('Connected to sever')
+  socket.emit('join', $.deparam(window.location.search), err => {
+    if (err) {
+      alert(err)
+      window.location.href = '/'
+    } else {
+    }
+  })
 })
+
+// when user disconnects to ther server
 socket.on('disconnect', () => {
   console.log('Disconnect from server')
 })
+
+// to update online peoples
+socket.on('updatePeoples', users => {
+  var ol = $('<ol></ol>')
+  users.forEach(name => {
+    ol.append(`<li>${name}</li>`)
+  })
+  $('#users').html(ol)
+})
+
+// receive message and append to chats
 socket.on('newMessage', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
   let template = $('#message-template').html()
@@ -28,17 +51,19 @@ socket.on('newMessage', msg => {
   $('#messages').append(html)
   scroll()
 })
+
+// Sending message via jQuery
 $('#form').on('submit', e => {
   e.preventDefault()
-  if (!$('[name=message]').val() == '') {
-    socket.emit('createMessage', {
-      from: 'john',
-      message: $('[name=message]').val()
-    }, () => {
-      $('[name=message]').val('')
-    })
-  }
+  socket.emit('createMessage', {
+    from: 'john',
+    message: $('[name=message]').val()
+  }, () => {
+    $('[name=message]').val('')
+  })
 })
+
+// Receive location and append to chats
 socket.on('newLocation', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
   let template = $('#location-message-template').html()
@@ -50,6 +75,8 @@ socket.on('newLocation', msg => {
   $('#messages').append(html)
   scroll()
 })
+
+// Sending location via jQuery
 $('#location').on('click', () => {
   if (!navigator.geolocation) {
     return alert('Geolocation doesnot supported by your browser')
@@ -57,6 +84,8 @@ $('#location').on('click', () => {
   $('#location').attr('disabled', 'disabled').text('Sending Location..')
   navigator.geolocation.getCurrentPosition(position => {
     $('#location').removeAttr('disabled').text('Send Location')
+
+    // Emmitting location
     socket.emit('createLocation', {
       lat: position.coords.latitude,
       lng: position.coords.longitude
