@@ -4,7 +4,7 @@
   "description": "Simple chat app with socket io",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "test": "mocha server/**/*.test.js",
     "test-watch": "nodemon --exec 'npm test'"
   },

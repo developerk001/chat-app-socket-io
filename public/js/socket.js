@@ -6,8 +6,14 @@ socket.on('disconnect', () => {
   console.log('Disconnect from server')
 })
 socket.on('newMessage', msg => {
-  var time = moment(msg.createdAt).format('h:mm a')
-  $('#messages').append(`<li>${msg.from}: ${time} => ${msg.message}</li>`)
+  let time = moment(msg.createdAt).format('h:mm a')
+  let template = $('#message-template').html()
+  let html = Mustache.render(template, {
+    message: msg.message,
+    from: msg.from,
+    createdAt: time
+  })
+  $('#messages').append(html)
 })
 $('#form').on('submit', e => {
   e.preventDefault()
@@ -21,8 +27,14 @@ $('#form').on('submit', e => {
   }
 })
 socket.on('newLocation', msg => {
-  var time = moment(msg.createdAt).format('h:mm a')
-  $('#messages').append(`<li>${msg.from}: ${time} => <a target="_blank" href="${msg.link}">My Location</a></li>`)
+  let time = moment(msg.createdAt).format('h:mm a')
+  let template = $('#location-message-template').html()
+  let html = Mustache.render(template, {
+    from: msg.from,
+    createdAt: time,
+    link: msg.link
+  })
+  $('#messages').append(html)
 })
 $('#location').on('click', () => {
   if (!navigator.geolocation) {
