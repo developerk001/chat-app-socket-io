@@ -52,17 +52,6 @@ socket.on('newMessage', msg => {
   scroll()
 })
 
-// Sending message via jQuery
-$('#form').on('submit', e => {
-  e.preventDefault()
-  socket.emit('createMessage', {
-    from: 'john',
-    message: $('[name=message]').val()
-  }, () => {
-    $('[name=message]').val('')
-  })
-})
-
 // Receive location and append to chats
 socket.on('newLocation', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
@@ -74,6 +63,16 @@ socket.on('newLocation', msg => {
   })
   $('#messages').append(html)
   scroll()
+})
+
+// Sending message via jQuery
+$('#form').on('submit', e => {
+  e.preventDefault()
+  socket.emit('createMessage', {
+    message: $('[name=message]').val()
+  }, () => {
+    $('[name=message]').val('')
+  })
 })
 
 // Sending location via jQuery

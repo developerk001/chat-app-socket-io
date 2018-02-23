@@ -9,7 +9,7 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 const {getMessage, getLocationLink} = require('./utils/message')
-const {isString} = require('./utils/validate')
+const {isValidString} = require('./utils/validate')
 const {Users} = require('./utils/users')
 var users = new Users()
 
@@ -20,7 +20,7 @@ io.on('connection', socket => {
 
   // New User Joins
   socket.on('join', (info, callback) => {
-    if (!isString(info.name) || !isString(info.room)) return callback('Both name and room are required')
+    if (!isValidString(info.name) || !isValidString(info.room)) return callback('Both name and room are required')
     socket.join(info.room)
     users.addUser(socket.id, info.name, info.room)
     io.to(info.room).emit('updatePeoples', users.getUsers(info.room))
@@ -31,13 +31,19 @@ io.on('connection', socket => {
 
   // Send Message to all clients
   socket.on('createMessage', (message, callback) => {
-    io.emit('newMessage', getMessage(message.from, message.message))
+    var user = users.getUser(socket.id)
+    if (user && isValidString(message.message)) {
+      io.to(user.room).emit('newMessage', getMessage(user.name, message.message))
+    }
     callback()
   })
 
   // Create Location
   socket.on('createLocation', location => {
-    io.emit('newLocation', getLocationLink('Admin', location.lat, location.lng))
+    var user = users.getUser(socket.id)
+    if (user) {
+      io.to(user.room).emit('newLocation', getLocationLink(user.name, location.lat, location.lng))
+    }
   })
 
   // When User disconnects
