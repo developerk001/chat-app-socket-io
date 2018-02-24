@@ -20,6 +20,20 @@ io.on('connection', socket => {
 
   // New User Joins
   socket.on('join', (info, callback) => {
+    var activeUsers = users.getUsers(info.room)
+    var exists = false
+    for (i in activeUsers) {
+      if (activeUsers[i] === info.name) {
+        exists = true
+      }
+    }
+    if (exists) {
+      return callback('User already exists')
+    }
+    console.log(activeUsers)
+    if (!(activeUsers.filter(user => info.name === user.name))) {
+      return callback(`user with ${info.name} already exists.`)
+    }
     if (!isValidString(info.name) || !isValidString(info.room)) return callback('Both name and room are required')
     socket.join(info.room)
     users.addUser(socket.id, info.name, info.room)
