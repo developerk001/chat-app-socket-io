@@ -156,7 +156,12 @@ button:disabled {
   list-style-type: none;
   padding: 10px;
 }
-
+.chat__messages li {
+  background: #2980b9;
+  display: table;
+  margin: 10px 0;
+  border-radius: 20px;
+}
 .message {
   padding: 10px;
 }
@@ -165,14 +170,21 @@ button:disabled {
   display: flex;
   margin-bottom: 5px;
 }
-
 .message__title h4 {
   font-weight: 600;
   margin-right: 10px;
+  color: white;
 }
 
 .message__title span {
-  color: #999;
+  color: #ccc !important;
+}
+
+.message__body p {
+  color: #fff !important;
+}
+.clear {
+  clear: right;
 }
 
 @media (max-width: 600px) {

@@ -42,13 +42,27 @@ socket.on('updatePeoples', users => {
 // receive message and append to chats
 socket.on('newMessage', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
-  let template = $('#message-template').html()
-  let html = Mustache.render(template, {
-    message: msg.message,
-    from: msg.from,
-    createdAt: time
-  })
-  $('#messages').append(html)
+  // let template = $('#message-template').html()
+  // let html = Mustache.render(template, {
+  //   message: "<p>hello</p>",
+  //   from: msg.from,
+  //   createdAt: time
+  // })
+  let style = ''
+  if (msg.from === $.deparam(window.location.search).name) {
+    style = `style="float: right;"`
+  }
+  $('#messages').append(`
+    <li class="message clear"${style}>
+      <div class="message__title">
+        <h4>${msg.from}</h4>
+        <span>${time}</span>
+      </div>
+      <div class="message__body">
+        <p>${msg.message}</p>
+      </div>
+    </li>
+    `)
   scroll()
 })
 
