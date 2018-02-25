@@ -12,7 +12,6 @@ const {getMessage, getLocationLink} = require('./utils/message')
 const {isValidString} = require('./utils/validate')
 const {Users} = require('./utils/users')
 var users = new Users()
-var rooms = []
 
 app.use(express.static(publicPath))
 io.on('connection', socket => {
@@ -20,10 +19,6 @@ io.on('connection', socket => {
 
   // New User Joins
   socket.on('join', (info, callback) => {
-    if (!rooms.includes(info.room)) {
-      rooms.push(info.room)
-    }
-    socket.emit('rooms', rooms)
     var activeUsers = users.getUsers(info.room)
     if(activeUsers.includes(info.name)) {
       return callback('User Already Exists')
@@ -59,15 +54,6 @@ io.on('connection', socket => {
 
   // When User disconnects
   socket.on('disconnect', () => {
-    var disconnectedUser = users.getUser(socket.id)
-    io.of('/chat').in(disconnectedUser.room).clients((error, clients) => {
-      if (error) {
-        return error
-      }
-      if (clients.length === 0) {
-        rooms = rooms.filter(room => room !== disconnectedUser.room)
-      }
-    })
     var user = users.removeUser(socket.id)
     if (user) {
       io.to(user.room).emit('updatePeoples', users.getUsers(user.room))

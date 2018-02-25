@@ -71,7 +71,7 @@ socket.on('newLocation', msg => {
     <li class="message clear"${style}>
       <div class="message__title">
       <h4>${msg.from}</h4>
-      <span>${msg.createdAt}</span>
+      <span>${time}</span>
     </div>
       <div class="message__body">
       <p><a href="${msg.link}" target="_blank">My Location</a></p>
@@ -81,13 +81,6 @@ socket.on('newLocation', msg => {
   scroll()
 })
 
-// Displaying Rooms
-socket.on('rooms', rooms => {
-  rooms.forEach(room => {
-    $('#rooms').append(`<option for="${room}">${room}</option>`)
-  })
-  console.log(rooms)
-})
 
 // Sending message via jQuery
 $('#form').on('submit', e => {
