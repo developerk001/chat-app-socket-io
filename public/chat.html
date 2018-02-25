@@ -13,7 +13,7 @@
     </div>
     <div class="chat__main">
       <ol id="messages" class="chat__messages">
-        
+
       </ol>
       <div class="chat__footer">
         <form id="form">
@@ -23,21 +23,10 @@
         <button id="location">Send Location</button>
       </div>
     </div>
-    <script id="location-message-template" type="text/template">
-      <li class="message">
-        <div class="message__title">
-          <h4>{{from}}</h4>
-          <span>{{createdAt}}</span>
-        </div>
-        <div class="message__body">
-          <p><a href="{{link}}" target="_blank">My Location</a></p>
-        </div>
-      </li>
-    </script>
     <script src="./js/libs/moment.js"></script>
     <script src="./js/libs/jquery.js"></script>
     <script src="./js/libs/mustache.js"></script>
-    <script src="./js/libs/deparam.js"> </script>
+    <script src="./js/libs/deparam.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/socket.js"></script>
   </body>

@@ -42,15 +42,9 @@ socket.on('updatePeoples', users => {
 // receive message and append to chats
 socket.on('newMessage', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
-  // let template = $('#message-template').html()
-  // let html = Mustache.render(template, {
-  //   message: "<p>hello</p>",
-  //   from: msg.from,
-  //   createdAt: time
-  // })
   let style = ''
   if (msg.from === $.deparam(window.location.search).name) {
-    style = `style="float: right;"`
+    style = ` style="float: right;"`
   }
   $('#messages').append(`
     <li class="message clear"${style}>
@@ -62,21 +56,37 @@ socket.on('newMessage', msg => {
         <p>${msg.message}</p>
       </div>
     </li>
-    `)
+  `)
   scroll()
 })
 
 // Receive location and append to chats
 socket.on('newLocation', msg => {
   let time = moment(msg.createdAt).format('h:mm a')
-  let template = $('#location-message-template').html()
-  let html = Mustache.render(template, {
-    from: msg.from,
-    createdAt: time,
-    link: msg.link
-  })
-  $('#messages').append(html)
+  let style = ''
+  if (msg.from === $.deparam(window.location.search).name) {
+    style = ` style="float: right;"`
+  }
+  $('#messages').append(`
+    <li class="message clear"${style}>
+      <div class="message__title">
+      <h4>${msg.from}</h4>
+      <span>${msg.createdAt}</span>
+    </div>
+      <div class="message__body">
+      <p><a href="${msg.link}" target="_blank">My Location</a></p>
+    </div>
+    </li>
+  `)
   scroll()
+})
+
+// Displaying Rooms
+socket.on('rooms', rooms => {
+  rooms.forEach(room => {
+    $('#rooms').append(`<option for="${room}">${room}</option>`)
+  })
+  console.log(rooms)
 })
 
 // Sending message via jQuery
